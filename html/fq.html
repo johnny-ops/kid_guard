@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidGuard - Welcome Guardian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .background-circles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .circle {
+            position: absolute;
+            background-color: #6B9265;
+            border-radius: 50%;
+        }
+        
+        .circle1 { width: 200px; height: 200px; top: -50px; left: -50px; }
+        .circle2 { width: 300px; height: 300px; top: -100px; right: 50px; }
+        .circle3 { width: 130px; height: 130px; bottom: 80px; left: 80px; }
+        .circle4 { width: 300px; height: 300px; bottom: -70px; right: -70px; }
+        .circle5 { width: 200px; height: 200px; bottom: -20px; left: -40px; background-color: #5A7D55; }
+        .circle6 { width: 300px; height: 300px; top: -20px; right: -80px; background-color: #5A7D55; }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            z-index: 10;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logo {
+            margin-bottom: 10px;
+        }
+        
+        .logo-text {
+            font-size: 70px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-text .kid { color: black; }
+        .logo-text .guard { color: #6B9265; }
+        
+        .logo-icon {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #6B9265;
+            transform: rotate(-30deg);
+            margin-right: 10px;
+        }
+        
+        .tagline {
+            font-size: 27px;
+            color: black;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            color: #333;
+        }
+        
+        .form-input {
+            width: 100%;
+            height: 50px;
+            padding: 14px;
+            font-size: 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #e0e0e0;
+            box-sizing: border-box;
+        }
+        .form-input:hover{
+            border: 2px solid #4A7A50;
+            cursor: pointer;
+        }
+        .form-input:focus {
+            border: 2px solid #4A7A50; 
+            outline: none;
+        }
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-checkbox label {
+            margin-left: 5px;
+            font-size: 13px;
+            color: #333;
+        }
+        
+        .forgot-password a {
+            color: #333;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        
+        .login-button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            background-color: #6B9265;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+
+        @media (min-width: 1400px) and (min-height: 1000px) {
+           
+            .container {
+                max-width: 600px;
+                padding: 60px;
+            }
+            
+            .logo-text {
+                font-size: 38px;
+            }
+            
+            .logo-icon {
+                border-left: 18px solid transparent;
+                border-right: 18px solid transparent;
+                border-bottom: 30px solid #6B9265;
+            }
+            
+            .tagline {
+                font-size: 18px;
+                margin-bottom: 40px;
+            }
+            
+            .form-label {
+                font-size: 16px;
+            }
+            
+            .form-input {
+                padding: 16px;
+                font-size: 16px;
+            }
+            
+            .form-checkbox label, .forgot-password a {
+                font-size: 14px;
+            }
+            
+            .login-button {
+                padding: 16px;
+                font-size: 18px;
+                margin-top: 10px;
+            }
+            
+            /* Adjusting circle sizes for larger screens */
+            .circle1 { width: 280px; height: 280px; }
+            .circle2 { width: 220px; height: 220px; }
+            .circle4 { width: 280px; height: 280px; }
+            .circle5 { width: 240px; height: 240px; }
+            .circle6 { width: 230px; height: 230px; }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .logo-text {
+                font-size: 28px;
+            }
+            
+            .circle {
+                opacity: 0.8;
+            }
+        }
+        .register-link {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: #6B9265;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: #4A7A50;
+        }
+        @media (max-width: 480px) {
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .logo-text {
+                font-size: 24px;
+            }
+            
+            .circle {
+                opacity: 0.6;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="background-circles">
+        <div class="circle circle1"></div>
+        <div class="circle circle2"></div>
+        <div class="circle circle3"></div>
+        <div class="circle circle4"></div>
+        <div class="circle circle5"></div>
+        <div class="circle circle6"></div>
+    </div>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-text">
+                <span class="logo-icon"></span>
+                <span class="kid">KID</span><span class="guard">GUARD</span>
+            </div>
+        </div>
+        <div class="tagline">WELCOME GUARDIAN</div>
+        
+        <form>
+            <div class="form-group">
+                <label class="form-label">EMAIL ADDRESS:</label>
+                <input type="email" class="form-input" placeholder="Enter your email address" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">PASSWORD:</label>
+                <input type="password" class="form-input" placeholder="Enter your password" required>
+            </div>
+            
+            <div class="form-options">
+                <div class="form-checkbox">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Keep me logged in</label>
+                </div>
+                <div class="forgot-password">
+                    <a href="#">Forgot Password?</a>
+                </div>
+            </div>
+            
+            <button type="submit" class="login-button">LOGIN</button>
+            <div class="register-link">
+                Don't have an account? <a href="#">Register here</a>
+            </div>
+        </form>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBtxeS1bDIV6yeFIRm5hj1DOSHNcd0iWTA",
+  authDomain: "kidguard-bd47d.firebaseapp.com",
+  projectId: "kidguard-bd47d",
+  storageBucket: "kidguard-bd47d.firebasestorage.app",
+  messagingSenderId: "944513551799",
+  appId: "1:944513551799:web:b9663aeba5dd0649022c32",
+  measurementId: "G-ZSGML18X33"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const loginForm = document.getElementById("loginForm");
+
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    // Get input values
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    try {
+      // Sign in user
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log("User logged in:", user);
+
+      alert("Login successful!");
+      window.location.href = "dashboard.html"; // Redirect to a protected page
+    } catch (error) {
+      console.error("Login error:", error.message);
+      handleAuthError(error.code);
+    }
+  });
+});
+
+// Function to handle authentication errors
+function handleAuthError(errorCode) {
+  let errorMessage = "An error occurred. Please try again.";
+  switch (errorCode) {
+    case "auth/invalid-email":
+      errorMessage = "Invalid email format. Please check your email.";
+      break;
+    case "auth/user-not-found":
+      errorMessage = "No user found with this email. Please register first.";
+      break;
+    case "auth/wrong-password":
+      errorMessage = "Incorrect password. Please try again.";
+      break;
+    default:
+      errorMessage = "Failed to log in. Please check your details.";
+  }
+  alert(errorMessage);
+}
+    </script>
+</body>
+</html>

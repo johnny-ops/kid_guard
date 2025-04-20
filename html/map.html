@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Tracker Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* Base Styles */
+        body, html {
+            font-family: 'Poppins', sans-serif;
+            height: 100%;
+            margin: 0;
+            color: #333;
+        }
+
+        #map {
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        /* Profile Markers */
+        .profile-marker {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            object-fit: cover;
+            position: relative;
+        }
+
+        .custom-icon {
+            position: relative;
+        }
+
+        .custom-icon::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 15px solid white;
+            z-index: -1;
+        }
+
+        /* Custom Zoom Controls - Middle Left */
+        .custom-zoom-control {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .zoom-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+
+        .zoom-button:hover {
+            transform: scale(1.05);
+            background-color: #f8f8f8;
+        }
+
+        .zoom-in {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .zoom-out {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .zoom-out i {
+            color: #4285F4;
+        }
+
+        .locate-button {
+            font-size: 16px;
+        }
+
+        /* Floating Panel */
+        .floating-panel {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            padding: 20px;
+            width: 580px;
+            max-height: 400px;
+            overflow: auto;
+            transition: all 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+        .floating-panel strong {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a73e8;
+            display: block;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .floating-panel.hidden {
+            bottom: -100%;
+            opacity: 0;
+        }
+
+        /* Person Item in Floating Panel */
+        .floating-panel > div {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .floating-panel > div:hover {
+            background-color: #eef2ff;
+            transform: translateY(-2px);
+        }
+
+        .floating-panel > div strong {
+            font-size: 16px;
+            margin-bottom: 2px;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+       
+        .bottom-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            width: 600px;
+            max-width: 700px;
+        }
+
+        .nav-item {
+            margin: 0 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.2s ease;
+            color: #5f6368;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item:hover {
+            color: #1a73e8;
+            transform: translateY(-2px);
+        }
+
+        /* Settings Icon */
+        .settings-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 12px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.2s ease;
+        }
+
+        .settings-icon:hover {
+            background: #f5f5f5;
+            transform: rotate(30deg);
+        }
+
+        .settings-icon i {
+            font-size: 20px;
+            color: #5f6368;
+        }
+
+        /* Add Buttons */
+        .add-buttons {
+            position: absolute;
+            bottom: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .add-button {
+            background: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            color: #1a73e8;
+        }
+
+        .add-button i {
+            font-size: 16px;
+        }
+
+        .add-button:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Custom Styling for the Map */
+        .leaflet-control-container .leaflet-routing-container-hide {
+            display: none;
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            padding: 5px;
+        }
+
+        .leaflet-popup-content {
+            margin: 10px 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Home marker style */
+        .home-marker-icon {
+            color: #1a73e8;
+            font-size: 32px;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+        }
+
+        /* User current location marker style */
+        .user-location-marker {
+            background-color: #4285F4;
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .floating-panel {
+                width: 85%;
+            }
+            
+            .bottom-nav {
+                width: 90%;
+                padding: 12px 15px;
+            }
+            
+            .nav-item {
+                margin: 0 10px;
+                font-size: 12px;
+            }
+            
+            .nav-item i {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <div class="add-buttons">
+        <div class="add-button"><i class="fa-regular fa-plus"></i> Add new tag</div>
+        <div class="add-button"><i class="fa-regular fa-plus"></i> Add new item</div>
+    </div>
+    
+    <div class="floating-panel" id="floatingPanel">
+        <strong>People</strong>
+        <!-- People list will be dynamically populated from Firestore -->
+        <div id="peopleList"></div>
+    </div>
+    
+    <div class="bottom-nav" id="bottomNav">
+        <div class="nav-item"><i class="fa-solid fa-location-dot"></i> Location</div>
+        <div class="nav-item"><i class="fa-solid fa-house"></i> Home</div>
+        <div class="nav-item"><i class="fa-solid fa-shield-halved"></i> Safety</div>
+        <div class="nav-item"><i class="fa-solid fa-comment"></i> Chat</div>
+    </div>
+    
+    <div class="settings-icon"><i class="fa-regular fa-gear"></i></div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+           
+           const firebaseConfig = {
+               apiKey: "AIzaSyAVWDeCpVzB94TQ_3BpuLyQnVgBkDyhAMg",
+               authDomain: "gpsssu-53508.firebaseapp.com",
+               projectId: "gpsssu-53508",
+               storageBucket: "gpsssu-53508.firebasestorage.app",
+               messagingSenderId: "325085406896",
+               appId: "1:325085406896:web:467f8d590abcbc1454bd75"
+           };
+           
+       
+           firebase.initializeApp(firebaseConfig);
+           const db = firebase.firestore();
+           
+          
+           const map = L.map('map', {
+               zoomControl: false 
+           }).setView([14.713, 121.140], 17);
+           
+           
+           L.tileLayer('https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=40dz21YCsk5kH7oHXfvK', {
+               attribution: '&copy; OpenStreetMap contributors'
+           }).addTo(map);
+           
+           // Create custom zoom controls - moved to middle left
+           const customZoomControl = document.createElement('div');
+           customZoomControl.className = 'custom-zoom-control';
+           customZoomControl.innerHTML = `
+               <div class="zoom-button zoom-in">+</div>
+               <div class="zoom-button zoom-out">−</div>
+               <div class="zoom-button locate-button"><i class="fa-solid fa-location-arrow"></i></div>
+           `;
+           
+           document.body.appendChild(customZoomControl);
+           
+           // Add event listeners for custom zoom controls
+           document.querySelector('.zoom-in').addEventListener('click', function() {
+               map.zoomIn();
+           });
+           
+           document.querySelector('.zoom-out').addEventListener('click', function() {
+               map.zoomOut();
+           });
+           
+           // Initialize user location variables
+           let userCurrentLocation = null;
+           let userHomeLocation = null;
+           let userLocationMarker = null;
+           let homeMarker = null;
+           
+           // Function to update route from home to current location
+           function updateHomeToUserRoute() {
+               if (userHomeLocation && userCurrentLocation) {
+                   // Clear previous routing control if it exists
+                   if (window.routingControl) {
+                       map.removeControl(window.routingControl);
+                   }
+                   
+                   // Add routing from home to current location
+                   window.routingControl = L.Routing.control({
+                       waypoints: [
+                           L.latLng(userHomeLocation.latitude, userHomeLocation.longitude),
+                           L.latLng(userCurrentLocation.latitude, userCurrentLocation.longitude)
+                       ],
+                       routeWhileDragging: true,
+                       createMarker: function() { return null; }, // Don't create default markers
+                       lineOptions: {
+                           styles: [{ color: '#4285F4', opacity: 0.7, weight: 6 }]
+                       }
+                   }).addTo(map);
+                   
+                   // Fit map to show the route
+                   const bounds = L.latLngBounds(
+                       [userHomeLocation.latitude, userHomeLocation.longitude],
+                       [userCurrentLocation.latitude, userCurrentLocation.longitude]
+                   );
+                   map.fitBounds(bounds, { padding: [50, 50] });
+               }
+           }
+           
+           // Function to get and update current user location
+           function getCurrentLocation() {
+               if (navigator.geolocation) {
+                   navigator.geolocation.getCurrentPosition(
+                       function(position) {
+                           userCurrentLocation = {
+                               latitude: position.coords.latitude,
+                               longitude: position.coords.longitude
+                           };
+                           
+                           // Update or create user location marker
+                           if (userLocationMarker) {
+                               userLocationMarker.setLatLng([userCurrentLocation.latitude, userCurrentLocation.longitude]);
+                           } else {
+                               // Create a pulsing marker for current location
+                               userLocationMarker = L.circleMarker(
+                                   [userCurrentLocation.latitude, userCurrentLocation.longitude],
+                                   {
+                                       radius: 8,
+                                       fillColor: '#4285F4',
+                                       color: '#fff',
+                                       weight: 2,
+                                       opacity: 1,
+                                       fillOpacity: 0.8
+                                   }
+                               ).addTo(map);
+                           }
+                           
+                           // Update user document in Firestore
+                           updateUserDataInFirestore();
+                           
+                           // Update route if home location is set
+                           if (userHomeLocation) {
+                               updateHomeToUserRoute();
+                           }
+                       },
+                       function(error) {
+                           console.error("Error getting location:", error);
+                           alert("Could not get your current location. Please check your location settings.");
+                       }
+                   );
+               } else {
+                   alert("Geolocation is not supported by this browser.");
+               }
+           }
+           
+           // Create home marker icon
+           function createHomeMarkerIcon() {
+               return L.divIcon({
+                   html: '<i class="fa-solid fa-house home-marker-icon"></i>',
+                   iconSize: [40, 40],
+                   iconAnchor: [20, 40],
+                   className: 'home-marker'
+               });
+           }
+           
+           // Create custom marker icon factory function for people
+           function createCustomIcon(imageUrl) {
+               return L.divIcon({
+                   html: `<img src="${imageUrl || '/api/placeholder/50/50'}" class="profile-marker">`,
+                   iconSize: [50, 50],
+                   className: 'custom-icon'
+               });
+           }
+           
+           
+           function updateUserDataInFirestore() {
+               const userId = 'currentUser'; 
+               
+       
+               if (userCurrentLocation) {
+                   db.collection('users').doc(userId).set({
+                       currentLocation: new firebase.firestore.GeoPoint(
+                           userCurrentLocation.latitude,
+                           userCurrentLocation.longitude
+                       ),
+                       lastUpdated: firebase.firestore.Timestamp.now()
+                   }, { merge: true });
+               }
+           }
+           
+        
+           function setupHomeLocation(latitude, longitude, address) {
+               const userId = 'currentUser'; 
+               
+               userHomeLocation = {
+                   latitude: latitude,
+                   longitude: longitude
+               };
+               
+               
+               if (homeMarker) {
+                   homeMarker.setLatLng([latitude, longitude]);
+               } else {
+                   const homeIcon = createHomeMarkerIcon();
+                   homeMarker = L.marker([latitude, longitude], { icon: homeIcon })
+                       .addTo(map)
+                       .bindPopup("<b>Home</b><br>" + (address || "Your home location"));
+               }
+               
+             
+               db.collection('users').doc(userId).set({
+                   homeLocation: new firebase.firestore.GeoPoint(latitude, longitude),
+                   homeAddress: address || "Home",
+                   lastUpdated: firebase.firestore.Timestamp.now()
+               }, { merge: true });
+               
+               if (userCurrentLocation) {
+                   updateHomeToUserRoute();
+               }
+           }
+           
+           // Function to fetch user data from Firestore
+           function fetchUserData() {
+               const userId = 'currentUser';
+               
+               db.collection('users').doc(userId).get().then((doc) => {
+                   if (doc.exists) {
+                       const userData = doc.data();
+                       
+                       // Set home location if available
+                       if (userData.homeLocation) {
+                           userHomeLocation = {
+                               latitude: userData.homeLocation.latitude,
+                               longitude: userData.homeLocation.longitude
+                           };
+                           
+                           const homeIcon = createHomeMarkerIcon();
+                           homeMarker = L.marker(
+                               [userHomeLocation.latitude, userHomeLocation.longitude],
+                               { icon: homeIcon }
+                           )
+                           .addTo(map)
+                           .bindPopup("<b>Home</b><br>" + (userData.homeAddress || "Your home location"));
+                       }
+                       
+                       // Get current location
+                       getCurrentLocation();
+                   } else {
+                       // New user - set up initial data
+                       // First get current location
+                       getCurrentLocation();
+                       
+                       // For demo purposes, set a default home location if none exists
+                       // In a real app, you would ask the user to set their home location
+                       setupHomeLocation(14.708, 121.135, "Default Home Location");
+                   }
+               }).catch((error) => {
+                   console.error("Error getting user data:", error);
+                   // Still try to get current location even if Firestore fails
+                   getCurrentLocation();
+               });
+           }
+           
+           // Store people markers in an object to be able to update them
+           const markers = {};
+           
+           // Function to update the people list in the floating panel
+           function updatePeopleList(people) {
+               const peopleList = document.getElementById('peopleList');
+               peopleList.innerHTML = '';
+               
+               people.forEach(person => {
+                   const personDiv = document.createElement('div');
+                   personDiv.style = 'display: flex; align-items: center; gap: 10px; margin-top: 10px;';
+                   
+                   const lastUpdated = person.lastUpdated ? calculateTimeDifference(person.lastUpdated.toDate()) : '';
+                   
+                   personDiv.innerHTML = `
+                       <img src="${person.photoUrl || '/api/placeholder/50/50'}" alt="${person.name}" class="profile-marker">
+                       <div>
+                           <strong>${person.name}</strong><br>
+                           ${person.address || 'No address'} 
+                           ${lastUpdated ? `<span style="font-size: 12px; color: gray;">${lastUpdated} updated</span>` : ''}
+                       </div>
+                   `;
+                   
+                   // Add click event to center map on this person
+                   personDiv.addEventListener('click', () => {
+                       if (person.location) {
+                           map.setView([person.location.latitude, person.location.longitude], 17);
+                       }
+                   });
+                   
+                   peopleList.appendChild(personDiv);
+               });
+           }
+           
+           // Function to calculate time difference for "last updated"
+           function calculateTimeDifference(timestamp) {
+               const now = new Date();
+               const diff = Math.floor((now - timestamp) / 1000 / 60); // difference in minutes
+               
+               if (diff < 1) return 'just now';
+               if (diff < 60) return `${diff} min`;
+               if (diff < 1440) return `${Math.floor(diff / 60)} hr`;
+               return `${Math.floor(diff / 1440)} day`;
+           }
+           
+           // Function to fetch people data from Firestore
+           function fetchPeopleData() {
+               db.collection('people').onSnapshot(snapshot => {
+                   const people = [];
+                   
+                   snapshot.forEach(doc => {
+                       const person = doc.data();
+                       person.id = doc.id;
+                       people.push(person);
+                       
+                       // Update or create marker for this person
+                       if (person.location) {
+                           const position = L.latLng(person.location.latitude, person.location.longitude);
+                           
+                           if (markers[person.id]) {
+                               // Update existing marker
+                               markers[person.id].setLatLng(position);
+                           } else {
+                               // Create new marker
+                               const icon = createCustomIcon(person.photoUrl);
+                               const marker = L.marker(position, { icon: icon })
+                                   .addTo(map)
+                                   .bindPopup(`<b>${person.name}</b><br>${person.address || 'No address'}`);
+                               
+                               markers[person.id] = marker;
+                           }
+                       }
+                   });
+                   
+                   // Update the people list in the UI
+                   updatePeopleList(people);
+               });
+           }
+           
+           // Event listener for the locate button
+           document.querySelector('.locate-button').addEventListener('click', function() {
+               // Get current location and center the map on it
+               getCurrentLocation();
+               if (userCurrentLocation) {
+                   map.setView([userCurrentLocation.latitude, userCurrentLocation.longitude], 17);
+               }
+           });
+           
+           // Home button click handler
+           document.querySelector('.nav-item:nth-child(2)').addEventListener('click', function() {
+               if (userHomeLocation) {
+                   map.setView([userHomeLocation.latitude, userHomeLocation.longitude], 17);
+               }
+           });
+           
+           // Initialize location tracking
+           fetchUserData();
+           
+           // Initialize people data
+           fetchPeopleData();
+           
+           // Function to initialize Firestore with sample data
+           function initializeFirestoreData() {
+               // Initialize sample people data
+               const samplePeople = [
+                   {
+                       name: "Maria Santos",
+                       photoUrl: "https://i.pravatar.cc/150?img=1",
+                       location: new firebase.firestore.GeoPoint(14.713, 121.140),
+                       address: "123 Maple Street, Quezon City",
+                       lastUpdated: firebase.firestore.Timestamp.now()
+                   },
+                   {
+                       name: "Juan Dela Cruz",
+                       photoUrl: "https://i.pravatar.cc/150?img=2",
+                       location: new firebase.firestore.GeoPoint(14.715, 121.143),
+                       address: "456 Oak Avenue, Marikina",
+                       lastUpdated: firebase.firestore.Timestamp.now()
+                   },
+                   {
+                       name: "Ana Reyes",
+                       photoUrl: "https://i.pravatar.cc/150?img=3",
+                       location: new firebase.firestore.GeoPoint(14.710, 121.138),
+                       address: "789 Pine Road, Pasig City",
+                       lastUpdated: firebase.firestore.Timestamp.now()
+                   }
+               ];
+               
+               // Check if people collection is empty before adding sample data
+               db.collection('people').get().then((snapshot) => {
+                   if (snapshot.empty) {
+                       // Add sample people data
+                       samplePeople.forEach(person => {
+                           db.collection('people').add(person)
+                               .then(() => console.log("Added sample person:", person.name))
+                               .catch(err => console.error("Error adding sample person:", err));
+                       });
+                   }
+               });
+           }
+           
+           // Initialize sample data in Firestore (only run this once)
+           // Uncomment this line to populate Firestore with sample data on first run
+           // initializeFirestoreData();
+           
+           // Handle floating panel
+           const floatingPanel = document.getElementById("floatingPanel");
+           floatingPanel.classList.remove("hidden");
+           
+           let isPanelVisible = true;
+           
+           window.togglePanel = function() {
+               isPanelVisible = !isPanelVisible;
+               if (isPanelVisible) {
+                   floatingPanel.classList.remove("hidden");
+               } else {
+                   floatingPanel.classList.add("hidden");
+               }
+           };
+           
+           // Toggle panel on bottom nav click
+           document.getElementById("bottomNav").addEventListener("click", function(e) {
+               // Only toggle panel if not clicking the home button
+               if (!e.target.closest('.nav-item:nth-child(2)')) {
+                   togglePanel();
+               }
+           });
+           
+           // Update user location periodically (every 30 seconds)
+           setInterval(getCurrentLocation, 30000);
+       });
+    </script>
+</body>
+</html>

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <style>
+        /* General Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        
+        .main-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 24px;
+        }
+        
+        /* Step Indicator */
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #ccc;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .step-text {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .step.active .step-number {
+            background-color: #4D774E;
+        }
+        
+        .step.active .step-text {
+            color: #4D774E;
+            font-weight: 600;
+        }
+        
+        .step-line {
+            flex: 1;
+            height: 3px;
+            background-color: #ccc;
+            margin: 0 10px;
+            position: relative;
+            top: -18px;
+        }
+        
+        .step-line.active {
+            background-color: #4D774E;
+        }
+        
+        /* Form Card Styles */
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .card-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="text"]:focus {
+            border-color: #4D774E;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(63, 132, 246, 0.2);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4D774E;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #4D774E;
+        }
+        
+        .btn:disabled {
+            background-color: #99b8e8;
+            cursor: not-allowed;
+        }
+        
+        .error-message {
+            color: #e53935;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .link {
+            display: block;
+            text-align: center;
+            color: #4D774E;
+            font-size: 14px;
+            text-decoration: none;
+            margin-top: 16px;
+        }
+        
+        .link:hover {
+            text-decoration: underline;
+        }
+        
+        /* PIN Input Styles */
+        .pin-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .pin-input {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        /* Timer Styles */
+        .timer {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 16px;
+        }
+        
+        /* Password Strength Meter */
+        .password-strength {
+            margin-top: 10px;
+        }
+        
+        .strength-meter {
+            height: 5px;
+            background-color: #eee;
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .strength-meter-fill {
+            height: 100%;
+            width: 0;
+            background-color: #e53935; /* Default weak */
+            transition: width 0.3s, background-color 0.3s;
+        }
+        
+        .strength-text {
+            font-size: 12px;
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        .password-requirements {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .requirement {
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .requirement::before {
+            content: "•";
+            margin-right: 5px;
+        }
+        
+        .requirement.met {
+            color: #4caf50;
+        }
+        
+        /* Success Animation */
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            border: 3px solid #4caf50;
+            position: relative;
+        }
+        
+        .success-icon::before,
+        .success-icon::after {
+            content: '';
+            height: 5px;
+            background-color: #4caf50;
+            display: block;
+            position: absolute;
+            border-radius: 5px;
+        }
+        
+        .success-icon::before {
+            width: 25px;
+            transform: rotate(45deg);
+            left: 14px;
+            top: 42px;
+        }
+        
+        .success-icon::after {
+            width: 45px;
+            transform: rotate(-45deg);
+            right: 12px;
+            top: 38px;
+        }
+        
+        /* Step Display Logic */
+        #step2, #step3, #step4 {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">Account Recovery</h1>
+        
+        <!-- Step Indicator -->
+        <div class="steps-container">
+            <div class="step active" id="step1-indicator">
+                <div class="step-number">1</div>
+                <div class="step-text">Email</div>
+            </div>
+            <div class="step-line" id="line1"></div>
+            <div class="step" id="step2-indicator">
+                <div class="step-number">2</div>
+                <div class="step-text">Verify</div>
+            </div>
+            <div class="step-line" id="line2"></div>
+            <div class="step" id="step3-indicator">
+                <div class="step-number">3</div>
+                <div class="step-text">Reset</div>
+            </div>
+            <div class="step-line" id="line3"></div>
+            <div class="step" id="step4-indicator">
+                <div class="step-number">4</div>
+                <div class="step-text">Done</div>
+            </div>
+        </div>
+        
+        <!-- Step 1: Email Entry -->
+        <div class="card" id="step1">
+            <h2 class="card-title">Forgot Password</h2>
+            <p class="card-subtitle">Enter your email address and we'll send you a verification code to reset your password.</p>
+            
+            <form id="email-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                    <p class="error-message" id="email-error"></p>
+                </div>
+                
+                <button type="submit" class="btn" id="send-pin-btn">Send Verification Code</button>
+            </form>
+            
+            <a href="#" class="link" id="back-to-login">Back to Login</a>
+        </div>
+        
+        <!-- Step 2: PIN Verification -->
+        <div class="card" id="step2">
+            <h2 class="card-title">Verify Your Email</h2>
+            <p class="card-subtitle">We've sent a 4-digit verification code to <span id="user-email"></span>. Please enter it below to continue.</p>
+            
+            <form id="pin-form">
+                <div class="form-group">
+                    <label for="pin1">Enter Verification Code</label>
+                    <div class="pin-container">
+                        <input type="text" class="pin-input" id="pin1" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="pin-input" id="pin2" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="pin-input" id="pin3" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="pin-input" id="pin4" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                    </div>
+                    <p class="error-message" id="pin-error"></p>
+                </div>
+                
+                <button type="submit" class="btn" id="verify-pin-btn">Verify Code</button>
+            </form>
+            
+            <div class="timer" id="resend-timer">
+                Resend code in <span id="timer-count">60</span> seconds
+            </div>
+            <a href="#" class="link" id="resend-link" style="display: none;">Resend Verification Code</a>
+        </div>
+        
+        <!-- Step 3: New Password -->
+        <div class="card" id="step3">
+            <h2 class="card-title">Create New Password</h2>
+            <p class="card-subtitle">Please create a new password for your account.</p>
+            
+            <form id="password-form">
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" placeholder="Enter new password" required>
+                    
+                    <div class="password-strength">
+                        <div class="strength-meter">
+                            <div class="strength-meter-fill" id="strength-fill"></div>
+                        </div>
+                        <div class="strength-text" id="strength-text"></div>
+                    </div>
+                    
+                    <div class="password-requirements">
+                        <div class="requirement" id="req-length">At least 8 characters</div>
+                        <div class="requirement" id="req-uppercase">At least one uppercase letter</div>
+                        <div class="requirement" id="req-lowercase">At least one lowercase letter</div>
+                        <div class="requirement" id="req-number">At least one number</div>
+                        <div class="requirement" id="req-special">At least one special character</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" placeholder="Confirm new password" required>
+                    <p class="error-message" id="password-error"></p>
+                </div>
+                
+                <button type="submit" class="btn" id="reset-btn">Reset Password</button>
+            </form>
+        </div>
+        
+  
+        <div class="card" id="step4">
+            <div class="success-icon"></div>
+            <h2 class="card-title">Password Reset Successful!</h2>
+            <p class="card-subtitle">Your password has been reset successfully. You can now log in with your new password.</p>
+            <a href="#" class="btn" id="go-to-login">Back to Login</a>
+        </div>
+    </div>
+
+    <script>
+     
+        let userEmail = '';
+        let verificationCode = '';
+        let timerInterval;
+        
+      
+        const emailForm = document.getElementById('email-form');
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('email-error');
+        const sendPinBtn = document.getElementById('send-pin-btn');
+        
+       
+        const pinForm = document.getElementById('pin-form');
+        const pinInputs = [
+            document.getElementById('pin1'),
+            document.getElementById('pin2'),
+            document.getElementById('pin3'),
+            document.getElementById('pin4')
+        ];
+        const userEmailSpan = document.getElementById('user-email');
+        const pinError = document.getElementById('pin-error');
+        const timerCount = document.getElementById('timer-count');
+        const resendTimer = document.getElementById('resend-timer');
+        const resendLink = document.getElementById('resend-link');
+        
+      
+        const passwordForm = document.getElementById('password-form');
+        const newPasswordInput = document.getElementById('new-password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const strengthFill = document.getElementById('strength-fill');
+        const strengthText = document.getElementById('strength-text');
+        const passwordError = document.getElementById('password-error');
+        const requirements = {
+            length: document.getElementById('req-length'),
+            uppercase: document.getElementById('req-uppercase'),
+            lowercase: document.getElementById('req-lowercase'),
+            number: document.getElementById('req-number'),
+            special: document.getElementById('req-special')
+        };
+        
+        // Step Indicators
+        const step1Indicator = document.getElementById('step1-indicator');
+        const step2Indicator = document.getElementById('step2-indicator');
+        const step3Indicator = document.getElementById('step3-indicator');
+        const step4Indicator = document.getElementById('step4-indicator');
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
+        const line3 = document.getElementById('line3');
+        
+        // Step Containers
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const step4 = document.getElementById('step4');
+        
+        // Navigation
+        const backToLoginLink = document.getElementById('back-to-login');
+        const goToLoginBtn = document.getElementById('go-to-login');
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Email Form Submission
+            emailForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleEmailSubmit();
+            });
+            
+            // PIN Form Submission
+            pinForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handlePinSubmit();
+            });
+            
+            // PIN Input Handling
+            pinInputs.forEach((input, index) => {
+                // Focus next input when digit is entered
+                input.addEventListener('input', function() {
+                    if (this.value.length === 1) {
+                        if (index < pinInputs.length - 1) {
+                            pinInputs[index + 1].focus();
+                        }
+                    }
+                });
+                
+                // Allow only digits
+                input.addEventListener('keypress', function(e) {
+                    if (!/^\d$/.test(e.key)) {
+                        e.preventDefault();
+                    }
+                });
+                
+                // Handle backspace
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                        pinInputs[index - 1].focus();
+                    }
+                });
+            });
+            
+            // Password Validation
+            newPasswordInput.addEventListener('input', function() {
+                checkPasswordStrength(this.value);
+            });
+            
+            // Password Form Submission
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handlePasswordSubmit();
+            });
+            
+            // Resend PIN
+            resendLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                resendVerificationCode();
+            });
+            
+            // Navigation
+            backToLoginLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                // In a real app, redirect to login page
+                alert('Redirecting to login page...');
+            });
+            
+            goToLoginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // In a real app, redirect to login page
+                alert('Redirecting to login page...');
+            });
+        });
+        
+        // Functions
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        function handleEmailSubmit() {
+            // Reset error
+            emailError.style.display = 'none';
+            
+            // Get email
+            const email = emailInput.value.trim();
+            
+            // Validate email
+            if (!email) {
+                showError(emailError, 'Email is required');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showError(emailError, 'Please enter a valid email address');
+                return;
+            }
+            
+            // Show loading state
+            sendPinBtn.disabled = true;
+            sendPinBtn.textContent = 'Sending...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Store email for later use
+                userEmail = email;
+                userEmailSpan.textContent = email;
+                
+                // Go to step 2
+                goToStep(2);
+                
+                // Reset button
+                sendPinBtn.disabled = false;
+                sendPinBtn.textContent = 'Send Verification Code';
+                
+                // Start timer
+                startResendTimer();
+            }, 1500);
+        }
+        
+        function handlePinSubmit() {
+            // Reset error
+            pinError.style.display = 'none';
+            
+            // Get PIN
+            let pin = '';
+            pinInputs.forEach(input => {
+                pin += input.value;
+            });
+            
+            // Validate PIN
+            if (pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+                showError(pinError, 'Please enter a valid 4-digit verification code');
+                return;
+            }
+            
+            // Show loading state
+            document.getElementById('verify-pin-btn').disabled = true;
+            document.getElementById('verify-pin-btn').textContent = 'Verifying...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Store PIN for later use
+                verificationCode = pin;
+                
+                // Go to step 3
+                goToStep(3);
+                
+                // Reset button
+                document.getElementById('verify-pin-btn').disabled = false;
+                document.getElementById('verify-pin-btn').textContent = 'Verify Code';
+                
+                // Clear timer
+                clearInterval(timerInterval);
+            }, 1500);
+        }
+        
+        function startResendTimer() {
+            let timeLeft = 60;
+            timerCount.textContent = timeLeft;
+            resendTimer.style.display = 'block';
+            resendLink.style.display = 'none';
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerCount.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    resendTimer.style.display = 'none';
+                    resendLink.style.display = 'block';
+                }
+            }, 1000);
+        }
+        
+        function resendVerificationCode() {
+            // Reset PIN inputs
+            pinInputs.forEach(input => {
+                input.value = '';
+            });
+            pinInputs[0].focus();
+            
+            // Simulate API call
+            resendLink.textContent = 'Sending...';
+            setTimeout(() => {
+                // Restart timer
+                startResendTimer();
+                resendLink.textContent = 'Resend Verification Code';
+            }, 1500);
+        }
+        
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            let feedback = '';
+            
+            // Check requirements
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[^A-Za-z0-9]/.test(password);
+            
+            // Update requirement UI
+            toggleRequirement(requirements.length, hasLength);
+            toggleRequirement(requirements.uppercase, hasUppercase);
+            toggleRequirement(requirements.lowercase, hasLowercase);
+            toggleRequirement(requirements.number, hasNumber);
+            toggleRequirement(requirements.special, hasSpecial);
+            
+            // Calculate strength
+            if (hasLength) strength += 1;
+            if (hasUppercase) strength += 1;
+            if (hasLowercase) strength += 1;
+            if (hasNumber) strength += 1;
+            if (hasSpecial) strength += 1;
+            
+            // Update strength meter
+            const percentage = (strength / 5) * 100;
+            strengthFill.style.width = `${percentage}%`;
+            
+            // Set color and text based on strength
+            if (password === '') {
+                strengthFill.style.width = '0';
+                strengthText.textContent = '';
+            } else if (strength <= 2) {
+                strengthFill.style.backgroundColor = '#e53935'; // Red for weak
+                strengthText.textContent = 'Weak';
+                strengthText.style.color = '#e53935';
+            } else if (strength <= 3) {
+                strengthFill.style.backgroundColor = '#ffb300'; // Amber for medium
+                strengthText.textContent = 'Medium';
+                strengthText.style.color = '#ffb300';
+            } else {
+                strengthFill.style.backgroundColor = '#43a047'; // Green for strong
+                strengthText.textContent = 'Strong';
+                strengthText.style.color = '#43a047';
+            }
+        }
+        
+        function toggleRequirement(element, isMet) {
+            if (isMet) {
+                element.classList.add('met');
+            } else {
+                element.classList.remove('met');
+            }
+        }
+        
+        function handlePasswordSubmit() {
+            // Reset error
+            passwordError.style.display = 'none';
+            
+            // Get passwords
+            const newPassword = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            // Validate password strength
+            let strength = 0;
+            if (newPassword.length >= 8) strength += 1;
+            if (/[A-Z]/.test(newPassword)) strength += 1;
+            if (/[a-z]/.test(newPassword)) strength += 1;
+            if (/[0-9]/.test(newPassword)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(newPassword)) strength += 1;
+            
+            if (strength <= 2) {
+                showError(passwordError, 'Please choose a stronger password');
+                return;
+            }
+            
+            // Validate password match
+            if (newPassword !== confirmPassword) {
+                showError(passwordError, 'Passwords do not match');
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('reset-btn').disabled = true;
+            document.getElementById('reset-btn').textContent = 'Resetting Password...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Go to success step
+                goToStep(4);
+                
+                // Reset button
+                document.getElementById('reset-btn').disabled = false;
+                document.getElementById('reset-btn').textContent = 'Reset Password';
+            }, 1500);
+        }
+        
+        function goToStep(step) {
+            // Hide all steps
+            step1.style.display = 'none';
+            step2.style.display = 'none';
+            step3.style.display = 'none';
+            step4.style.display = 'none';
+            
+            // Update indicators
+            step1Indicator.classList.remove('active');
+            step2Indicator.classList.remove('active');
+            step3Indicator.classList.remove('active');
+            step4Indicator.classList.remove('active');
+            line1.classList.remove('active');
+            line2.classList.remove('active');
+            line3.classList.remove('active');
+            
+            // Show the current step
+            if (step === 1) {
+                step1.style.display = 'block';
+                step1Indicator.classList.add('active');
+            } else if (step === 2) {
+                step2.style.display = 'block';
+                step1Indicator.classList.add('active');
+                step2Indicator.classList.add('active');
+                line1.classList.add('active');
+                pinInputs[0].focus();
+            } else if (step === 3) {
+                step3.style.display = 'block';
+                step1Indicator.classList.add('active');
+                step2Indicator.classList.add('active');
+                step3Indicator.classList.add('active');
+                line1.classList.add('active');
+                line2.classList.add('active');
+                newPasswordInput.focus();
+            } else if (step === 4) {
+                step4.style.display = 'block';
+                step1Indicator.classList.add('active');
+                step2Indicator.classList.add('active');
+                step3Indicator.classList.add('active');
+                step4Indicator.classList.add('active');
+                line1.classList.add('active');
+                line2.classList.add('active');
+                line3.classList.add('active');
+            }
+        }
+        
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

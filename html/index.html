@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - KidGuard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 32px;
+            font-weight: bold;
+            justify-content: center;
+        }
+        .icon {
+            width: 70px;
+            height: 70px;
+            background: #C8102E;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+        }
+        .icon svg {
+            width: 40px;
+            height: 40px;
+            fill: #fff;
+        }
+        .text-black { color: #000; }
+        .text-red { color: #C8102E; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #C8102E, #FF6B6B);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: move 4s infinite alternate ease-in-out;
+        }
+        .circle-1 { width: 100px; height: 100px; background: white; top: 5%; left: 10%; animation-delay: 0s; }
+        .circle-2 { width: 180px; height: 180px; background: white; bottom: 10%; right: 15%; animation-delay: 1s; }
+        .circle-3 { width: 140px; height: 140px; background: white; top: 40%; left: 60%; animation-delay: 2s; }
+        .circle-4 { width: 80px; height: 80px; background: white; bottom: 50%; left: 20%; animation-delay: 1.5s; }
+        .circle-5 { width: 160px; height: 160px; background: white; top: 70%; right: 55%; animation-delay: 1.5s; }
+        .circle-6 { width: 160px; height: 160px; background: white; top: 70%; right: 55%; animation-delay: 1.5s; }
+        .circle-7 { width: 90px; height: 90px; background: white; bottom: 5%; right: 5%; animation-delay: 2.5s; }
+        .circle-8 { width: 90px; height: 90px; background: white; top: 10%; right: 7%; animation-delay: 2.5s; }
+        .circle-9 { width: 90px; height: 90px; background: white; top: 20%; left: 2%; animation-delay: 2.5s; }
+
+        @keyframes move {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(30px); }
+        }  
+
+        @media (max-width: 768px) {
+            .flex-col-reverse {
+                flex-direction: column-reverse;
+            }
+            .w-1\/2 {
+                width: 100%;
+            }
+            .gradient-bg {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body class="flex h-screen bg-gray-100 flex-col-reverse md:flex-row">
+    
+    <!-- Left Section: Login Form -->
+    <div class="w-full md:w-1/2 flex flex-col items-center justify-center p-8 bg-white shadow-lg relative">
+        <div class="text-center mb-4">
+            <div class="logo">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 11l19-9-7.97 20-4.79-7.47L2 11z"></path>
+                    </svg>
+                </div>
+                <span class="text-black text-5xl">KID</span><span class="text-red text-5xl">GUARD</span>
+            </div>
+            <h1 class="text-gray-600 text-2xl mt-3">WELCOME GUARDIAN!</h1>
+        </div>
+        
+        <div class="w-full max-w-md">
+            <form class="mt-6">
+                <label class="block text-gray-700">Username:</label>
+                <input type="text" id="username" class="w-full p-2 border rounded mt-1 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Enter your username" required>
+    
+                <label class="block text-gray-700 mt-4">Password:</label>
+                <input type="password" id="password" class="w-full p-2 border rounded mt-1 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Enter your password" required>
+    
+                <div class="flex justify-between items-center mt-3">
+                    <label class="flex items-center text-sm">
+                        <input type="checkbox" class="mr-1"> Keep me logged in
+                    </label>
+                    <a href="#" class="text-blue-500 text-sm hover:text-blue-700">Forgot Password?</a>
+                </div>
+                
+                <button class="w-full bg-red-600 text-white py-2 rounded mt-4 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">Login</button>
+            </form>
+            
+            <div class="text-center mt-4">
+              <p class="text-gray-500">Or Sign in with</p>
+                <div class="flex justify-center gap-4 mt-2">
+                    <button id="google-signin" class="bg-red-500 text-white py-2 px-4 rounded flex items-center hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Google_%22G%22_logo.svg" class="w-5 h-5 mr-2" alt="Google Logo"> Google
+                    </button>
+                    <button id="facebook-signin" class="bg-blue-600 text-white py-2 px-4 rounded flex items-center hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" class="w-5 h-5 mr-2" alt="Facebook Logo"> Facebook
+                    </button>
+                </div>
+            </div>
+            
+            <p class="text-center text-gray-600 mt-4 text-sm">Don't have an Account? <a href="register.html" class="text-blue-500 hover:text-blue-700">Register Here</a></p>
+        </div>
+    </div>
+    
+    <div class="w-full md:w-1/2 flex items-center justify-center gradient-bg relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-full h-full flex items-center justify-center">
+            <div id="tutorial-container" class="relative w-3/4 min-h-[300px] overflow-hidden">
+                <div id="tutorial-slider" class="flex transition-transform duration-500 ease-in-out">
+                    <div class="slide w-full flex-shrink-0 text-white text-center p-8">
+                        <img src="Free_Vector___Cloud_robotics_abstract_concept_illustration-removebg-preview.png" alt="Step 1" class="w-full h-auto object-contain rounded-lg">
+                        <h2 class="text-3xl font-bold mt-2">Step 1</h2>
+                        <p class="mt-2">Enter your username and password to log in.</p>
+                    </div>
+                    <div class="slide w-full flex-shrink-0 text-white text-center p-8">
+                        <img src="step2.png" alt="Step 2" class="w-full h-auto object-contain rounded-lg">
+                        <h2 class="text-3xl font-bold mt-2">Step 2</h2>
+                        <p class="mt-2">Click on "Login" to proceed.</p>
+                    </div>
+                    <div class="slide w-full flex-shrink-0 text-white text-center p-8">
+                        <img src="step3.png" alt="Step 3" class="w-full h-auto object-contain rounded-lg">
+                        <h2 class="text-3xl font-bold mt-2">Step 3</h2>
+                        <p class="mt-2">Use Google or Facebook for quick sign-in.</p>
+                    </div>
+                    <div class="slide w-full flex-shrink-0 text-white text-center p-8">
+                        <img src="step4.png" alt="Step 4" class="w-full h-auto object-contain rounded-lg">
+                        <h2 class="text-3xl font-bold mt-2">Step 4</h2>
+                        <p class="mt-2">Enjoy your secured account access!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+        <div class="circle circle-4"></div>
+        <div class="circle circle-5"></div>
+        <div class="circle circle-6"></div>
+        <div class="circle circle-7"></div>
+        <div class="circle circle-8"></div>
+        <div class="circle circle-9"></div>
+    </div>
+    <script>
+         let index = 0;
+    const slides = document.querySelectorAll(".slide");
+    const slider = document.getElementById("tutorial-slider");
+    
+    function showNextSlide() {
+        index = (index + 1) % slides.length;
+        slider.style.transform = `translateX(-${index * 100}%)`;
+    }
+    
+    setInterval(showNextSlide, 3000);
+        document.getElementById("google-signin").addEventListener("click", function() {
+            alert("Google Sign-In Clicked!");
+        });
+
+        document.getElementById("facebook-signin").addEventListener("click", function() {
+            alert("Facebook Sign-In Clicked!");
+        });
+    </script>
+</body>
+</html>
+    

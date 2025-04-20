@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register GPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-semibold mb-4 text-center">Register GPS Device</h2>
+        
+        <form id="gpsForm" class="space-y-4">
+            <input type="text" id="kidName" placeholder="Kid's Name" 
+                class="w-full p-2 border rounded-lg" required>
+
+            <input type="text" id="kidId" placeholder="Kid's ID" 
+                class="w-full p-2 border rounded-lg" required>
+
+            <input type="text" id="gpsId" placeholder="GPS Device ID" 
+                class="w-full p-2 border rounded-lg" required>
+
+            <button type="submit" 
+                class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition">
+                Register GPS
+            </button>
+        </form>
+
+        <p id="message" class="mt-4 text-center"></p>
+    </div>
+
+    <script>
+        document.getElementById("gpsForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            let kidName = document.getElementById("kidName").value;
+            let kidId = document.getElementById("kidId").value;
+            let gpsId = document.getElementById("gpsId").value;
+
+            let response = await fetch("https://yourwebsite.com/api/register_gps", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ kidName, kidId, gpsId })
+            });
+
+            let result = await response.json();
+            let message = document.getElementById("message");
+
+            if (response.ok) {
+                message.textContent = "✅ GPS Registered Successfully!";
+                message.classList.add("text-green-600");
+            } else {
+                message.textContent = "❌ Registration Failed: " + result.error;
+                message.classList.add("text-red-600");
+            }
+        });
+    </script>
+
+</body>
+</html>

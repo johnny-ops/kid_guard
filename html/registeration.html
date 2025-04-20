@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidGuard - Create an Account</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/poppins/1.1.2/css/poppins.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background-color: rgba(107, 155, 118, 0.3);
+            top: -100px;
+            left: -100px;
+        }
+        
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            background-color: rgba(74, 120, 83, 0.2);
+            bottom: -50px;
+            right: -50px;
+        }
+        
+        .circle-3 {
+            width: 150px;
+            height: 150px;
+            background-color: rgba(138, 173, 147, 0.3);
+            top: 50%;
+            right: 10%;
+        }
+        
+        .circle-4 {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(107, 155, 118, 0.2);
+            bottom: 20%;
+            left: 10%;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+            position: relative;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .logo {
+            width: 200px;
+            height: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo-bg {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: rgba(107, 155, 118, 0.1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+        
+        /* Centered title styling */
+        .title-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-align: center;
+            display: inline-block;
+            position: relative;
+            padding-bottom: 15px;
+            margin: 0 auto 30px;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            width: 70px;
+            height: 4px;
+            background-color: #2f4935;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 5px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: #fff;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #6b9b76;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(107, 155, 118, 0.1);
+        }
+        
+        .btn {
+            background-color: #6b9b76;
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 20px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            letter-spacing: 1px;
+        }
+        
+        .btn::before {
+            content: "";
+            position: absolute;
+            width: 120%;
+            height: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 8px;
+            z-index: -1;
+            transition: height 0.5s ease;
+        }
+        
+        .btn:hover {
+            background-color: #5a8a65;
+            box-shadow: 0 5px 15px rgba(90, 138, 101, 0.3);
+        }
+        
+        .btn:hover::before {
+            height: 450%;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+            position: relative;
+            font-size: 15px;
+        }
+        
+        .login-link a {
+            color: #6b9b76;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+            padding: 0 5px;
+        }
+        
+        .login-link a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: #6b9b76;
+            bottom: -2px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .login-link a:hover::after {
+            width: 100%;
+        }
+        
+        /* Custom select styling */
+        .select-wrapper {
+            position: relative;
+        }
+        
+        .select-wrapper::after {
+            content: "▼";
+            font-size: 12px;
+            color: #6b9b76;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        
+        select.form-control {
+            appearance: none;
+            padding-right: 40px;
+        }
+        
+        /* Address section styling */
+        .address-section {
+            grid-column: span 2;
+            margin-bottom: 15px;
+        }
+        
+        .address-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .address-section h3::after {
+            content: "";
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: #6b9b76;
+            bottom: 0;
+            left: 0;
+            border-radius: 1.5px;
+        }
+        
+        .address-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .address-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .disabled {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+        
+        /* Error message styling */
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Success message styling */
+        .success-message {
+            background-color: rgba(107, 155, 118, 0.1);
+            border-left: 4px solid #6b9b76;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #2f4935;
+            font-weight: 500;
+            display: none;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            vertical-align: middle;
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+    <div class="circle circle-4"></div>
+    
+    <div class="container">
+        <div class="logo-container">
+            <div class="logo-bg"></div>
+            <svg class="logo" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+                <path d="M160 60 L120 100 L140 140 L180 80 Z" fill="#6b9b76" />
+                <path d="M120 100 L140 140 L100 120 Z" fill="#4a7853" />
+                <path d="M140 140 L180 80 L220 110 L180 150 Z" fill="#8aad93" />
+                <text x="240" y="105" font-family="Arial, sans-serif" font-weight="bold" font-size="36" fill="#333">KID<tspan fill="#6b9b76">GUARD</tspan></text>
+                <text x="346" y="125" font-family="Arial, sans-serif" font-size="14" fill="#555">WELCOME GUARDIAN</text>
+            </svg>
+        </div>
+        
+        <div class="title-container">
+            <h1>CREATE AN ACCOUNT</h1>
+        </div>
+        
+        <div class="success-message" id="successMessage">
+            Registration successful! Redirecting to your dashboard...
+        </div>
+        
+        <form id="registrationForm" method="POST">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">FULL NAME:</label>
+                    <input type="text" id="name" class="form-control" placeholder="Enter your full name" required>
+                    <div class="error-message" id="nameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">EMAIL ADDRESS:</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your email address" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact">MOBILE NUMBER:</label>
+                    <input type="tel" id="contact" class="form-control" placeholder="Enter your mobile number (e.g., 09XX XXX XXXX)" required>
+                    <div class="error-message" id="contactError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">PASSWORD:</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                
+                <div class="address-section">
+                    <h3>ADDRESS DETAILS</h3>
+                    <div class="address-grid">
+                        <div class="form-group">
+                            <label for="house_no">HOUSE/LOT/UNIT NO. & STREET:</label>
+                            <input type="text" id="house_no" class="form-control" placeholder="House/Lot/Unit No. & Street" required>
+                            <div class="error-message" id="houseError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="region">REGION:</label>
+                            <div class="select-wrapper">
+                                <select id="region" class="form-control" required>
+                                    <option value="" disabled selected>Select region</option>
+                                    <option value="NCR">National Capital Region (NCR)</option>
+                                    <option value="CAR">Cordillera Administrative Region (CAR)</option>
+                                    <option value="Region I">Region I (Ilocos Region)</option>
+                                    <option value="Region II">Region II (Cagayan Valley)</option>
+                                    <option value="Region III">Region III (Central Luzon)</option>
+                                    <option value="Region IV-A">Region IV-A (CALABARZON)</option>
+                                    <option value="Region IV-B">Region IV-B (MIMAROPA)</option>
+                                    <option value="Region V">Region V (Bicol Region)</option>
+                                    <option value="Region VI">Region VI (Western Visayas)</option>
+                                    <option value="Region VII">Region VII (Central Visayas)</option>
+                                    <option value="Region VIII">Region VIII (Eastern Visayas)</option>
+                                    <option value="Region IX">Region IX (Zamboanga Peninsula)</option>
+                                    <option value="Region X">Region X (Northern Mindanao)</option>
+                                    <option value="Region XI">Region XI (Davao Region)</option>
+                                    <option value="Region XII">Region XII (SOCCSKSARGEN)</option>
+                                    <option value="Region XIII">Region XIII (Caraga)</option>
+                                    <option value="BARMM">Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)</option>
+                                </select>
+                            </div>
+                            <div class="error-message" id="regionError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="province">PROVINCE:</label>
+                            <div class="select-wrapper">
+                                <select id="province" class="form-control disabled" required disabled>
+                                    <option value="" disabled selected>Select region first</option>
+                                </select>
+                            </div>
+                            <div class="error-message" id="provinceError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="city">CITY/MUNICIPALITY:</label>
+                            <div class="select-wrapper">
+                                <select id="city" class="form-control disabled" required disabled>
+                                    <option value="" disabled selected>Select province first</option>
+                                </select>
+                            </div>
+                            <div class="error-message" id="cityError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="barangay">BARANGAY:</label>
+                            <input type="text" id="barangay" class="form-control" placeholder="Enter barangay" required>
+                            <div class="error-message" id="barangayError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="zip_code">ZIP CODE:</label>
+                            <input type="text" id="zip_code" class="form-control" placeholder="Enter zip code" required>
+                            <div class="error-message" id="zipError"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="relationship">RELATIONSHIP TO CHILD:</label>
+                    <div class="select-wrapper">
+                        <select id="relationship" class="form-control" required>
+                            <option value="" disabled selected>Guardian or Parent</option>
+                            <option value="parent">Parent</option>
+                            <option value="legal_guardian">Legal Guardian</option>
+                            <option value="grandparent">Grandparent</option>
+                            <option value="other_relative">Other Relative</option>
+                        </select>
+                    </div>
+                    <div class="error-message" id="relationshipError"></div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn" id="submitBtn">
+                <span class="spinner" id="loadingSpinner"></span>
+                <span id="submitText">REGISTER</span>
+            </button>
+        </form>
+        
+        <div class="login-link">
+            Already have an account? <a href="login.html">Click Here</a>
+        </div>
+    </div>
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+      
+        // Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBtxeS1bDIV6yeFIRm5hj1DOSHNcd0iWTA",
+          authDomain: "kidguard-bd47d.firebaseapp.com",
+          projectId: "kidguard-bd47d",
+          storageBucket: "kidguard-bd47d.appspot.com", // Fixed storage bucket URL
+          messagingSenderId: "944513551799",
+          appId: "1:944513551799:web:b9663aeba5dd0649022c32",
+          measurementId: "G-ZSGML18X33"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        
+        // Wait for DOM to be fully loaded
+        document.addEventListener("DOMContentLoaded", () => {
+          // Address data for Philippines
+          const addressData = {
+            "NCR": {
+              name: "National Capital Region",
+              provinces: {
+                "Metro Manila": {
+                  cities: ["Manila", "Quezon City", "Makati", "Pasig", "Taguig", "Pasay", "Caloocan", 
+                           "Las Piñas", "Marikina", "Mandaluyong", "Muntinlupa", "Navotas", "Parañaque", 
+                           "San Juan", "Valenzuela", "Malabon", "Pateros"]
+                }
+              }
+            },
+            "Region IV-A": {
+              name: "CALABARZON",
+              provinces: {
+                "Cavite": {
+                  cities: ["Cavite City", "Tagaytay", "Trece Martires", "Dasmariñas", "Bacoor", "Imus", 
+                           "General Trias", "Kawit", "Rosario", "Tanza", "Silang", "Carmona", "Maragondon"]
+                },
+                "Laguna": {
+                  cities: ["San Pablo", "Santa Rosa", "Biñan", "Cabuyao", "Calamba", "San Pedro", "Los Baños", 
+                           "Alaminos", "Bay", "Calauan", "Liliw", "Luisiana", "Pila"]
+                },
+                "Batangas": {
+                  cities: ["Batangas City", "Lipa", "Tanauan", "Santo Tomas", "Bauan", "Lemery", "Taal", 
+                           "Balayan", "Calaca", "Rosario", "San Juan", "Malvar", "Ibaan"]
+                },
+                "Rizal": {
+                  cities: ["Antipolo", "Cainta", "Taytay", "Angono", "Binangonan", "San Mateo", "Rodriguez", 
+                           "Tanay", "Teresa", "Morong", "Pililla", "Baras", "Jala Jala"]
+                },
+                "Quezon": {
+                  cities: ["Lucena", "Tayabas", "Sariaya", "Candelaria", "Lucban", "Pagbilao", "Atimonan", 
+                           "Tiaong", "Infanta", "Lopez", "Dolores", "Gumaca", "Mauban"]
+                }
+              }
+            },
+            "Region III": {
+              name: "Central Luzon",
+              provinces: {
+                "Bulacan": {
+                  cities: ["Malolos", "Meycauayan", "San Jose del Monte", "Baliwag", "Obando", "Marilao", 
+                           "Calumpit", "Plaridel", "Pulilan", "Santa Maria", "Guiguinto", "Bocaue", "Bustos"]
+                },
+                "Pampanga": {
+                  cities: ["San Fernando", "Angeles", "Mabalacat", "Apalit", "Floridablanca", "Guagua", 
+                           "Lubao", "Mexico", "Porac", "Santa Rita", "Santo Tomas", "Bacolor", "Magalang"]
+                },
+                "Bataan": {
+                  cities: ["Balanga", "Dinalupihan", "Hermosa", "Limay", "Mariveles", "Morong", 
+                           "Orani", "Orion", "Pilar", "Samal", "Abucay", "Bagac"]
+                },
+                "Nueva Ecija": {
+                  cities: ["Cabanatuan", "Gapan", "Palayan", "San Jose", "Science City of Muñoz", "Aliaga", 
+                           "Bongabon", "Cabiao", "Carranglan", "Cuyapo", "Gabaldon", "Guimba", "Jaen"]
+                },
+                "Tarlac": {
+                  cities: ["Tarlac City", "Paniqui", "Capas", "Concepcion", "Gerona", "Camiling", 
+                           "Bamban", "Victoria", "Pura", "Ramos", "San Manuel", "Santa Ignacia", "Moncada"]
+                },
+                "Zambales": {
+                  cities: ["Olongapo", "Iba", "Subic", "Botolan", "Cabangan", "Candelaria", 
+                           "Castillejos", "Masinloc", "Palauig", "San Antonio", "San Felipe", "San Marcelino", "San Narciso"]
+                },
+                "Aurora": {
+                  cities: ["Baler", "Casiguran", "Dilasag", "Dinalungan", "Dingalan", "Dipaculao", 
+                           "Maria Aurora", "San Luis"]
+                }
+              }
+            },
+            "Region VII": {
+              name: "Central Visayas",
+              provinces: {
+                "Cebu": {
+                  cities: ["Cebu City", "Mandaue", "Lapu-Lapu", "Talisay", "Danao", "Toledo", "Bogo", "Carcar", 
+                           "Naga", "Badian", "Balamban", "Dalaguete", "Liloan", "Minglanilla", "Moalboal", "Oslob", "Santander"]
+                },
+                "Bohol": {
+                  cities: ["Tagbilaran", "Panglao", "Jagna", "Tubigon", "Loon", "Ubay", "Talibon", 
+                           "Carmen", "Baclayon", "Dauis", "Alburquerque", "Loboc", "Candijay"]
+                },
+                "Negros Oriental": {
+                  cities: ["Dumaguete", "Bais", "Bayawan", "Canlaon", "Guihulngan", "Tanjay", "Sibulan", 
+                           "Valencia", "Siaton", "Amlan", "Bacong", "Dauin", "Manjuyod"]
+                },
+                "Siquijor": {
+                  cities: ["Siquijor", "Larena", "Lazi", "Maria", "San Juan", "Enrique Villanueva"]
+                }
+              }
+            }
+          };
+          
+          // Get DOM elements
+          const regionSelect = document.getElementById("region");
+          const provinceSelect = document.getElementById("province");
+          const citySelect = document.getElementById("city");
+          const form = document.getElementById("registrationForm");
+          const loadingSpinner = document.getElementById("loadingSpinner");
+          const submitText = document.getElementById("submitText");
+          const submitBtn = document.getElementById("submitBtn");
+          const successMessage = document.getElementById("successMessage");
+          
+          // Form validation
+          const validateForm = () => {
+            let isValid = true;
+            
+            // Clear previous error messages
+            const errorElements = document.querySelectorAll(".error-message");
+            errorElements.forEach(el => {
+              el.style.display = "none";
+              el.textContent = "";
+            });
+            
+            // Validate name
+            const name = document.getElementById("name").value.trim();
+            if (!name) {
+              document.getElementById("nameError").textContent = "Please enter your full name";
+              document.getElementById("nameError").style.display = "block";
+              isValid = false;
+            }
+            
+            // Validate email
+            const email = document.getElementById("email").value.trim();
+            if (!email) {
+              document.getElementById("emailError").textContent = "Please enter your email address";
+              document.getElementById("emailError").style.display = "block";
+              isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+              document.getElementById("emailError").textContent = "Please enter a valid email address";
+              document.getElementById("emailError").style.display = "block";
+              isValid = false;
+            }
+            
+            // Validate phone number
+            const contact = document.getElementById("contact").value.trim();
+            if (!contact) {
+              document.getElementById("contactError").textContent = "Please enter your mobile number";
+              document.getElementById("contactError").style.display = "block";
+              isValid = false;
+            } else if (!/^09\d{9}$/.test(contact.replace(/\s+/g, ''))) {
+              document.getElementById("contactError").textContent = "Please enter a valid Philippine mobile number (e.g., 09XX XXX XXXX)";
+              document.getElementById("contactError").style.display = "block";
+              isValid = false;
+            }
+            
+            // Validate password
+            const password = document.getElementById("password").value;
+            if (!password) {
+              document.getElementById("passwordError").textContent = "Please enter a password";
+              document.getElementById("passwordError").style.display = "block";
+              isValid = false;
+            } else if (password.length < 6) {
+              document.getElementById("passwordError").textContent = "Password must be at least 6 characters";
+              document.getElementById("passwordError").style.display = "block";
+              isValid = false;
+            }
+            
+            // Validate address fields
+            const houseStreet = document.getElementById("house_no").value.trim();
+            if (!houseStreet) {
+              document.getElementById("houseError").textContent = "Please enter your house/lot/unit number and street";
+              document.getElementById("houseError").style.display = "block";
+              isValid = false;
+            }
+            
+            const region = document.getElementById("region").value;
+            if (!region) {
+              document.getElementById("regionError").textContent = "Please select a region";
+              document.getElementById("regionError").style.display = "block";
+              isValid = false;
+            }
+            
+            const province = document.getElementById("province").value;
+            if (!province && !provinceSelect.disabled) {
+              document.getElementById("provinceError").textContent = "Please select a province";
+              document.getElementById("provinceError").style.display = "block";
+              isValid = false;
+            }
+            
+            const city = document.getElementById("city").value;
+            if (!city && !citySelect.disabled) {
+              document.getElementById("cityError").textContent = "Please select a city/municipality";
+              document.getElementById("cityError").style.display = "block";
+              isValid = false;
+            }
+            
+            const barangay = document.getElementById("barangay").value.trim();
+            if (!barangay) {
+              document.getElementById("barangayError").textContent = "Please enter your barangay";
+              document.getElementById("barangayError").style.display = "block";
+              isValid = false;
+            }
+            
+            const zipCode = document.getElementById("zip_code").value.trim();
+            if (!zipCode) {
+              document.getElementById("zipError").textContent = "Please enter your zip code";
+              document.getElementById("zipError").style.display = "block";
+              isValid = false;
+            } else if (!/^\d{4}$/.test(zipCode)) {
+              document.getElementById("zipError").textContent = "Please enter a valid 4-digit zip code";
+              document.getElementById("zipError").style.display = "block";
+              isValid = false;
+            }
+            
+            const relationship = document.getElementById("relationship").value;
+            if (!relationship) {
+              document.getElementById("relationshipError").textContent = "Please select your relationship to the child";
+              document.getElementById("relationshipError").style.display = "block";
+              isValid = false;
+            }
+            
+            return isValid;
+          };
+          
+          // Region change event
+          regionSelect.addEventListener("change", function() {
+            // Enable province select
+            provinceSelect.disabled = false;
+            provinceSelect.classList.remove("disabled");
+            
+            // Reset province and city selects
+            provinceSelect.innerHTML = '<option value="" disabled selected>Select province</option>';
+            citySelect.innerHTML = '<option value="" disabled selected>Select province first</option>';
+            citySelect.disabled = true;
+            citySelect.classList.add("disabled");
+            
+            const selectedRegion = this.value;
+            if (selectedRegion && addressData[selectedRegion]) {
+              const provinces = addressData[selectedRegion].provinces;
+              for (const province in provinces) {
+                const option = document.createElement("option");
+                option.value = province;
+                option.textContent = province;
+                provinceSelect.appendChild(option);
+              }
+            }
+          });
+          
+          // Province change event
+          provinceSelect.addEventListener("change", function() {
+            // Enable city select
+            citySelect.disabled = false;
+            citySelect.classList.remove("disabled");
+            
+            // Reset city select
+            citySelect.innerHTML = '<option value="" disabled selected>Select city/municipality</option>';
+            
+            const selectedRegion = regionSelect.value;
+            const selectedProvince = this.value;
+            
+            if (selectedRegion && selectedProvince && addressData[selectedRegion] && 
+                addressData[selectedRegion].provinces[selectedProvince]) {
+              
+              const cities = addressData[selectedRegion].provinces[selectedProvince].cities;
+              cities.forEach(city => {
+                const option = document.createElement("option");
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+              });
+            }
+          });
+          
+          // Form submission handler
+          form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            
+            // Validate form first
+            if (!validateForm()) {
+              return;
+            }
+            
+            // Show loading state
+            loadingSpinner.style.display = "inline-block";
+            submitText.textContent = "PROCESSING...";
+            submitBtn.disabled = true;
+            
+            // Get form values
+            const email = document.getElementById("email").value.trim();
+            const name = document.getElementById("name").value.trim();
+            const contact = document.getElementById("contact").value.trim();
+            const password = document.getElementById("password").value;
+            const relationship = document.getElementById("relationship").value;
+            
+            // Get address values
+            const houseStreet = document.getElementById("house_no").value.trim();
+            const barangay = document.getElementById("barangay").value.trim();
+            const city = document.getElementById("city").value;
+            const province = document.getElementById("province").value;
+            const region = document.getElementById("region").value;
+            const zipCode = document.getElementById("zip_code").value.trim();
+            
+            // Create formatted address
+            const fullAddress = `${houseStreet}, Brgy. ${barangay}, ${city}, ${province}, ${region}, ${zipCode}`;
+            
+            try {
+              // Create new user account
+              const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+              const user = userCredential.user;
+              console.log("User created successfully with ID:", user.uid);
+              
+              // Store user data in Firestore using set with document ID
+              await setDoc(doc(db, "users", user.uid), {
+                uid: user.uid,
+                email: email,
+                name: name,
+                contact: contact,
+                address: {
+                  houseStreet: houseStreet,
+                  barangay: barangay,
+                  city: city,
+                  province: province,
+                  region: region,
+                  zipCode: zipCode,
+                  fullAddress: fullAddress
+                },
+                relationship: relationship,
+                accountCreated: new Date(),
+                lastUpdated: new Date()
+              });
+              
+              // Show success message
+              successMessage.style.display = "block";
+              form.reset();
+              
+              // Redirect after a short delay
+              setTimeout(() => {
+                window.location.href = "./html/login.html"; // Change this to your desired redirect page
+              }, 2000);
+              
+            } catch (error) {
+              console.error("Error during registration:", error);
+              
+              // Reset button state
+              loadingSpinner.style.display = "none";
+              submitText.textContent = "REGISTER";
+              submitBtn.disabled = false;
+              
+              // Handle specific authentication errors
+              handleAuthError(error.code);
+            }
+          });
+        });
+        
+        // Function to handle authentication errors
+        function handleAuthError(errorCode) {
+          // Define error elements
+          const emailError = document.getElementById("emailError");
+          const passwordError = document.getElementById("passwordError");
+          
+          switch (errorCode) {
+            case "auth/email-already-in-use":
+              emailError.textContent = "This email is already registered. Please log in instead.";
+              emailError.style.display = "block";
+              document.getElementById("email").focus();
+              break;
+              
+            case "auth/invalid-email":
+              emailError.textContent = "Invalid email format. Please enter a valid email address.";
+              emailError.style.display = "block";
+              document.getElementById("email").focus();
+              break;
+              
+            case "auth/weak-password":
+              passwordError.textContent = "Password is too weak. Use at least 6 characters with a mix of letters and numbers.";
+              passwordError.style.display = "block";
+              document.getElementById("password").focus();
+              break;
+              
+            case "auth/network-request-failed":
+              alert("Network error. Please check your internet connection and try again.");
+              break;
+              
+            case "auth/too-many-requests":
+              alert("Too many attempts. Please try again later.");
+              break;
+              
+            default:
+              alert("Registration failed. Please check your details and try again.");
+          }
+        }
+        
+        // Add input validation listeners
+        document.getElementById("email").addEventListener("input", function() {
+          document.getElementById("emailError").style.display = "none";
+        });
+        
+        document.getElementById("password").addEventListener("input", function() {
+          document.getElementById("passwordError").style.display = "none";
+        });
+        
+        document.getElementById("contact").addEventListener("input", function() {
+          // Format phone number as user types
+          let value = this.value.replace(/\D/g, '');
+          if (value.length > 0) {
+            if (value.length <= 2) {
+              this.value = value;
+            } else if (value.length <= 5) {
+              this.value = value.substring(0, 2) + ' ' + value.substring(2);
+            } else if (value.length <= 8) {
+              this.value = value.substring(0, 2) + ' ' + value.substring(2, 5) + ' ' + value.substring(5);
+            } else {
+              this.value = value.substring(0, 2) + ' ' + value.substring(2, 5) + ' ' + value.substring(5, 8) + ' ' + value.substring(8, 11);
+            }
+          }
+          document.getElementById("contactError").style.display = "none";
+        });
+    </script>
+</body>
+</html>
+            

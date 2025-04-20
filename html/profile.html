@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidGuard - Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #4B7B4B; /* Green background */
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: #4B7B4B;
+            color: white;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 48px;
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            color: #9FD29F;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-link svg {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            margin-top: 24px;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .logout-btn svg {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            position: relative;
+        }
+
+        .header {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-avatar-inner {
+            width: 32px;
+            height: 32px;
+            background-color: #e2e2e2;
+            border-radius: 50%;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            display: flex;
+            align-items: center;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .back-button svg {
+            margin-right: 8px;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Profile Card Styles */
+        .profile-card {
+            background-color: white;
+            border-radius: 8px;
+            margin: 64px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .profile-section {
+            background-color: #E8F5E9;
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 96px;
+            height: 96px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .profile-avatar-inner {
+            width: 80px;
+            height: 80px;
+            background-color: #e2e2e2;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-avatar-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 64px;
+            height: 64px;
+            color: #9E9E9E;
+        }
+
+        .profile-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .info-group {
+            margin-bottom: 16px;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: #757575;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-weight: 500;
+        }
+
+        .edit-button, .register-button {
+            background-color: #4B7B4B;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 24px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 24px;
+            transition: background-color 0.2s;
+        }
+
+        .edit-button:hover, .register-button:hover {
+            background-color: #3A5F3A;
+        }
+
+        .address-section, .kid-section {
+            background-color: #E8F5E9;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            color: #757575;
+        }
+
+        .error {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            color: #D32F2F;
+        }
+
+        .login-prompt {
+            text-align: center;
+            padding: 40px;
+            color: #555;
+        }
+
+        .login-button {
+            background-color: #4B7B4B;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 24px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 24px;
+            transition: background-color 0.2s;
+        }
+
+        .login-button:hover {
+            background-color: #3A5F3A;
+        }
+
+        #children-list {
+            margin-top: 16px;
+        }
+
+        .child-item {
+            background-color: white;
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .child-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .child-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .child-info {
+            font-size: 14px;
+            color: #757575;
+        }
+
+        /* For mobile devices */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 16px;
+            }
+            
+            .profile-card {
+                margin: 16px;
+                padding: 16px;
+                margin-top: 72px;
+            }
+            
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                top: 16px;
+                right: 16px;
+            }
+            
+            .back-button {
+                top: 16px;
+                left: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <div class="logo-text">KID GUARD</div>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    Home
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    My Profile
+                </a>
+                <a href="settings.html" class="nav-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Settings
+                </a>
+            </div>
+
+            <a href="#" id="logout-btn" class="logout-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Logout
+            </a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="user-avatar">
+                    <div class="user-avatar-inner"></div>
+                </div>
+                <span id="greeting">Hello!</span>
+            </div>
+
+            <!-- Back Button -->
+            <button class="back-button" onclick="window.history.back()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </button>
+
+            
+            <div class="profile-card">
+                <div id="profile-container" class="loading">
+                    Loading profile data...
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+  <!-- Firebase SDK -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.20.0/firebase-app-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.20.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.20.0/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.20.0/firebase-storage-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBtxeS1bDIV6yeFIRm5hj1DOSHNcd0iWTA",
+        authDomain: "kidguard-bd47d.firebaseapp.com",
+        projectId: "kidguard-bd47d",
+        storageBucket: "kidguard-bd47d.firebasestorage.app",
+        messagingSenderId: "944513551799",
+        appId: "1:944513551799:web:b9663aeba5dd0649022c32",
+        measurementId: "G-ZSGML18X33"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    const storage = firebase.storage();
+    
+    const profileContainer = document.getElementById('profile-container');
+    const greetingElement = document.getElementById('greeting');
+    const logoutBtn = document.getElementById('logout-btn');
+    
+    logoutBtn.addEventListener('click', () => {
+        auth.signOut().then(() => {
+            console.log('User signed out');
+            window.location.href = 'login.html'; 
+        }).catch((error) => {
+            console.error('Sign out error:', error);
+        });
+    });
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            console.log('User is signed in:', user.uid);
+            fetchUserProfile(user);
+        } else {
+            showLoginPrompt();
+        }
+    });
+
+    function showLoginPrompt() {
+        profileContainer.innerHTML = `
+            <div class="login-prompt">
+                <h3>Please log in to view your profile</h3>
+                <p>You need to be logged in to access your profile information.</p>
+                <button class="login-button" onclick="window.location.href='login.html'">Go to Login</button>
+            </div>
+        `;
+        profileContainer.className = '';
+        greetingElement.textContent = 'Hello!';
+    }
+
+    function fetchUserProfile(user) {
+        profileContainer.className = 'loading';
+        profileContainer.textContent = 'Loading profile data...';
+
+        db.collection('users').doc(user.uid).get()
+            .then(doc => {
+                if (doc.exists) {
+                    const userData = doc.data();
+                    renderProfile(userData);
+                    return;
+                }
+                
+                return db.collection('users').where('email', '==', user.email).limit(1).get();
+            })
+            .then(querySnapshot => {
+                if (querySnapshot && !querySnapshot.empty) {
+                    const userData = querySnapshot.docs[0].data();
+                    renderProfile(userData);
+                } else {
+                    checkOtherCollections(user);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching user profile:", error);
+                profileContainer.className = 'error';
+                profileContainer.textContent = 'Failed to load profile data. Please try again later.';
+            });
+    }
+
+    function checkOtherCollections(user) {
+        const collections = ['parents', 'guardians', 'users_data'];
+        
+        let foundUser = false;
+        let checksComplete = 0;
+        
+        collections.forEach(collectionName => {
+            db.collection(collectionName).where('email', '==', user.email).limit(1).get()
+                .then(querySnapshot => {
+                    checksComplete++;
+                    
+                    if (!foundUser && !querySnapshot.empty) {
+                        foundUser = true;
+                        const userData = querySnapshot.docs[0].data();
+                        renderProfile(userData);
+                    }
+                    
+                    if (checksComplete === collections.length && !foundUser) {
+                        const fallbackUserData = {
+                            name: user.displayName || user.email.split('@')[0],
+                            email: user.email,
+                            contact: '',
+                            address: {
+                                fullAddress: 'Address not provided',
+                                city: '',
+                                province: '',
+                                barangay: ''
+                            }
+                        };
+                        renderProfile(fallbackUserData);
+                    }
+                })
+                .catch(error => {
+                    checksComplete++;
+                    console.error(`Error checking ${collectionName}:`, error);
+                    
+                    if (checksComplete === collections.length && !foundUser) {
+                        const fallbackUserData = {
+                            name: user.displayName || user.email.split('@')[0],
+                            email: user.email,
+                            contact: '',
+                            address: {
+                                fullAddress: 'Address not provided',
+                                city: '',
+                                province: '',
+                                barangay: ''
+                            }
+                        };
+                        renderProfile(fallbackUserData);
+                    }
+                });
+        });
+    }
+
+    function fetchChildrenData(userId) {
+        return db.collection('children').where('parentId', '==', userId).get()
+            .then(querySnapshot => {
+                const children = [];
+                querySnapshot.forEach(doc => {
+                    children.push(doc.data());
+                });
+                return children;
+            })
+            .catch(error => {
+                console.error("Error fetching children:", error);
+                return [];
+            });
+    }
+
+    function renderProfile(userData) {
+        const firstName = userData.name ? userData.name.split(' ')[0] : 'User';
+        greetingElement.textContent = `Hello, ${firstName}!`;
+
+        const address = userData.address || {};
+        let fullAddress = address.fullAddress;
+        
+        if (!fullAddress) {
+            const components = [];
+            if (address.houseStreet) components.push(address.houseStreet);
+            if (address.barangay) components.push(`Brgy. ${address.barangay}`);
+            if (address.city) components.push(address.city);
+            if (address.province) components.push(address.province);
+            if (address.region) components.push(address.region);
+            if (address.zipCode) components.push(address.zipCode);
+            
+            fullAddress = components.join(', ');
+            if (fullAddress === '') fullAddress = 'Address not provided';
+        }
+        
+        const userId = userData.uid || userData.id;
+        fetchChildrenData(userId).then(children => {
+            
+            let childrenHTML = '';
+            
+            if (children && children.length > 0) {
+                childrenHTML = `
+                    <div id="children-list">
+                        ${children.map(child => `
+                            <div class="child-item">
+                                <p class="child-name">${child.name}</p>
+                                <p class="child-info">Age: ${child.age || 'Not specified'}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                childrenHTML = `<p class="info-value">No children registered</p>`;
+            }
+
+            const profileHTML = `
+                <div class="profile-content">
+                    <div class="profile-section">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <div class="profile-avatar-inner">
+                                    <svg class="profile-avatar-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <h2 class="profile-title">My Profile</h2>
+                        </div>
+                        <div class="info-group">
+                            <p class="info-label">Name</p>
+                            <p class="info-value">${userData.name || 'Not provided'}</p>
+                        </div>
+                        <div class="info-group">
+                            <p class="info-label">Email Address</p>
+                            <p class="info-value">${userData.email || 'Not provided'}</p>
+                        </div>
+                        <div class="info-group">
+                            <p class="info-label">Contact Number</p>
+                            <p class="info-value">${userData.contact || 'Not provided'}</p>
+                        </div>
+                        <button class="edit-button" id="edit-profile-btn">Edit Profile</button>
+                    </div>
+                    <div>
+                        <div class="address-section">
+                            <h3 class="section-title">Address</h3>
+                            <p>${fullAddress}</p>
+                        </div>
+                        <div class="kid-section">
+                            <h3 class="section-title">Kid Information</h3>
+                            <p class="info-label">Name</p>
+                            ${childrenHTML}
+                            
+                            <button class="register-button" id="register-child-btn">Register Child</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            profileContainer.className = '';
+            profileContainer.innerHTML = profileHTML;
+
+            document.getElementById('edit-profile-btn').addEventListener('click', () => {
+                window.location.href = 'edit-profile.html';
+            });
+            document.getElementById('register-child-btn').addEventListener('click', () => {
+                window.location.href = 'register-child.html';
+            });
+        });
+    }
+</script>
+</body>
+</html>

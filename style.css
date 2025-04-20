@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Base Styles */
+body, html {
+    font-family: 'Poppins', sans-serif;
+    height: 100%;
+    margin: 0;
+    color: #333;
+}
+
+#map {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+}
+
+/* Profile Markers */
+.profile-marker {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #4285F4;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    object-fit: cover;
+}
+
+/* Custom Map Marker - Location Pin Design */
+.profile-marker {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    object-fit: cover;
+    position: relative;
+}
+
+.custom-icon {
+    position: relative;
+}
+
+.custom-icon::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 15px solid white;
+    z-index: -1;
+}
+
+/* Floating Panel */
+.floating-panel {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    padding: 20px;
+    width: 380px;
+    max-height: 400px;
+    overflow: auto;
+    transition: all 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.floating-panel strong {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a73e8;
+    display: block;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.floating-panel.hidden {
+    bottom: -100%;
+    opacity: 0;
+}
+
+/* Person Item in Floating Panel */
+.floating-panel > div {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 10px;
+    transition: all 0.2s ease;
+}
+
+.floating-panel > div:hover {
+    background-color: #eef2ff;
+    transform: translateY(-2px);
+}
+
+.floating-panel > div strong {
+    font-size: 16px;
+    margin-bottom: 2px;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 15px 25px;
+    border-radius: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+    width: auto;
+    max-width: 500px;
+}
+
+.nav-item {
+    margin: 0 15px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s ease;
+    color: #5f6368;
+}
+
+.nav-item i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.nav-item:hover {
+    color: #1a73e8;
+    transform: translateY(-2px);
+}
+
+/* Settings Icon */
+.settings-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 12px;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.2s ease;
+}
+
+.settings-icon:hover {
+    background: #f5f5f5;
+    transform: rotate(30deg);
+}
+
+.settings-icon i {
+    font-size: 20px;
+    color: #5f6368;
+}
+
+/* Add Buttons */
+.add-buttons {
+    position: absolute;
+    bottom: 170px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.add-button {
+    background: white;
+    padding: 10px 18px;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    color: #1a73e8;
+}
+
+.add-button i {
+    font-size: 16px;
+}
+
+.add-button:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* Custom Styling for the Map */
+.leaflet-control-container .leaflet-routing-container-hide {
+    display: none;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    padding: 5px;
+}
+
+.leaflet-popup-content {
+    margin: 10px 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .floating-panel {
+        width: 85%;
+    }
+    
+    .bottom-nav {
+        width: 90%;
+        padding: 12px 15px;
+    }
+    
+    .nav-item {
+        margin: 0 10px;
+        font-size: 12px;
+    }
+    
+    .nav-item i {
+        font-size: 18px;
+    }
+}

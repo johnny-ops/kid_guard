@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History</title>
+    <style>
+        body {
+            background-color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            width: 350px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .box {
+            background-color: maroon;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            color: white;
+        }
+        .gps-id {
+            background-color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: black;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-button">&larr;</div>
+        <h2>Junior</h2>
+        <img class="profile-img" src="profile.jpg" alt="Profile">
+        <div class="box">
+            <span class="gps-id">Gps ID: 112243</span>
+        </div>
+        <div class="box"></div>
+        <div class="box"></div>
+    </div>
+</body>
+</html>
